@@ -1,0 +1,11 @@
+.lab-row {
+	display: block;
+}
+
+.lab-row div {
+	display: inline-block;	
+}
+
+.lab-row .lab-label {
+	margin-right: 20px;
+}
