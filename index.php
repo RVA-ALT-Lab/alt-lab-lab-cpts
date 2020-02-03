@@ -39,10 +39,11 @@ global $post;
     }
       return $content;
     }
-add_filter('the_content', 'alt_lab_lab_faculty_content');
+// add_filter('the_content', 'alt_lab_lab_faculty_content');
 
 
-function alt_lab_lab_faculty_data($post){
+function alt_lab_lab_faculty_data(){
+  global $post;
   $post_id = $post->ID;
   $content = '<div class="lab-faculty-data" id="lab-faculty-holder">';
   $title = get_field('title', $post_id);
@@ -72,6 +73,11 @@ function alt_lab_lab_faculty_data($post){
   }
   return $content . '</div>';
 }
+
+
+add_shortcode( 'faculty-info', 'alt_lab_lab_faculty_data' );
+
+
 
 /*
 *
