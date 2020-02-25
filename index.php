@@ -87,7 +87,6 @@ add_shortcode( 'faculty-info', 'alt_lab_lab_faculty_data' );
 */
 
 
-if (is_plugin_active( 'advanced-custom-fields-pro/acf.php'))  {
  
  //ACF JSON SAVER
   add_filter('acf/settings/save_json', 'alt_lab_lab_json_save_point');
@@ -95,7 +94,7 @@ if (is_plugin_active( 'advanced-custom-fields-pro/acf.php'))  {
   function alt_lab_lab_json_save_point( $path ) {
       
       // update path
-      $path = get_stylesheet_directory() . '/acf-json';
+      $path = plugin_dir_path(__FILE__) . '/acf-json';
       
       // return
       return $path;
@@ -111,13 +110,13 @@ if (is_plugin_active( 'advanced-custom-fields-pro/acf.php'))  {
       unset($paths[0]);    
       
       // append path
-      $path = get_stylesheet_directory() . '/acf-json';
+      $path = plugin_dir_path(__FILE__) . '/acf-json';
       
       // return
       return $paths;
       
   }
-}
+
 
 /*
 *
