@@ -39,7 +39,7 @@ global $post;
     }
       return $content;
     }
-// add_filter('the_content', 'alt_lab_lab_faculty_content');
+add_filter('the_content', 'alt_lab_lab_faculty_content');
 
 
 function alt_lab_lab_faculty_data(){
