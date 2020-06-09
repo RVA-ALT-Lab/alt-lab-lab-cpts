@@ -35,17 +35,19 @@ function alt_lab_lab_load_scripts() {
 function alt_lab_lab_faculty_content($content) {
 global $post;
     if ($post->post_type == 'faculty') {
-      $content = $content . alt_lab_lab_faculty_data($post);
+      $content =  alt_lab_lab_faculty_data() . $content;
     }
       return $content;
     }
 add_filter('the_content', 'alt_lab_lab_faculty_content');
 
 
+
+//for single faculty pages
 function alt_lab_lab_faculty_data(){
   global $post;
   $post_id = $post->ID;
-  $content = '<div class="lab-faculty-data" id="lab-faculty-holder">';
+  $html = '<div class="lab-faculty-data" id="lab-faculty-holder">';
   $title = get_field('title', $post_id);
   $expertise = get_field('area_of_expertise', $post_id);
   $location = get_field('location', $post_id);
@@ -53,29 +55,86 @@ function alt_lab_lab_faculty_data(){
   $email = get_field('email', $post_id);
   $website_url = get_field('website_url', $post_id);
   $website_title = get_field('website_title', $post_id);
+  $html .= '<div class="lab-row">';
   if ($title){
-    $content .= '<div class="lab-row"><div class="lab-label lab-title-label">Title:</div><div class="lab-content lab-title-content">' . $title . '</div></div>';
+    $html .= '<div class="lab-label lab-title-label">Title:</div><div class="lab-content lab-title-content">' . $title . '</div></div>';
   } 
   if ($expertise){
-    $content .= '<div class="lab-row"><div class="lab-label lab-expertise-label">Expertise:</div><div class="lab-content lab-expertise-content">' . $expertise . '</div></div>';
+    $html .= '<div class="lab-row"><div class="lab-label lab-expertise-label">Expertise:</div><div class="lab-content lab-expertise-content">' . $expertise . '</div></div>';
   } 
    if ($location){
-    $content .= '<div class="lab-row"><div class="lab-label lab-location-label">Location:</div><div class="lab-content lab-location-content">' . $location . '</div></div>';
+    $html .= '<div class="lab-row"><div class="lab-label lab-location-label">Location:</div><div class="lab-content lab-location-content">' . $location . '</div></div>';
   } 
    if ($phone){
-    $content .= '<div class="lab-row"><div class="lab-label lab-phone-label">Phone:</div><div class="lab-content lab-phone-content">' . $phone . '</div></div>';
+    $html .= '<div class="lab-row"><div class="lab-label lab-phone-label">Phone:</div><div class="lab-content lab-phone-content">' . $phone . '</div></div>';
   } 
-  if ($email){
-    $content .= '<div class="lab-row"><div class="lab-label lab-email-label">Email:</div><div class="lab-content lab-email-content"><a href="mailto:'.$email.'">' . $email . '</a></div></div>';
+  if ($html){
+    $html .= '<div class="lab-row"><div class="lab-label lab-email-label">Email:</div><div class="lab-content lab-email-content"><a href="mailto:'.$email.'">' . $email . '</a></div></div>';
   }
   if ($website_url){
-    $content .= '<div class="lab-row"><div class="lab-label lab-website-label">Website:</div><div class="lab-content lab-website-content"><a href="' . $website_url . '">' . $website_title . '</a></div></div>';
+    $html .= '<div class="lab-row"><div class="lab-label lab-website-label">Website:</div><div class="lab-content lab-website-content"><a href="' . $website_url . '">' . $website_title . '</a></div>';
   }
-  return $content . '</div>';
+  return $html . '</div></div>';
 }
 
 
-add_shortcode( 'faculty-info', 'alt_lab_lab_faculty_data' );
+//shortcode for faculty content by type
+function lab_all_faculty( $atts, $content = null ) {
+    extract(shortcode_atts( array(
+         'type' => '',  
+    ), $atts));     
+
+    $html ='';
+    $type = htmlspecialchars_decode($type);
+               $args = array(
+                      'posts_per_page' => -1,
+                      'post_type'   => 'faculty', 
+                      'post_status' => 'publish', 
+                      'orderby' => 'name', 
+                      'order' => 'ASC',                
+                      'meta_query' => array(
+                      'relation'    => 'OR',
+                      // array(
+                      //   'key'   => 'group',
+                      //   'value'   => $type,
+                      //   'compare' => 'LIKE'
+                      // ),
+                  )
+                      //do the published option and consider sorting
+                    );
+                    // query
+                    $the_query = new WP_Query( $args );
+                    if( $the_query->have_posts() ): 
+                      while ( $the_query->have_posts() ) : $the_query->the_post(); 
+                        global $post;
+                        $post_id = $post->ID;
+                        $title = get_field('title', $post_id);
+                        $expertise = get_field('area_of_expertise', $post_id);
+                        $location = get_field('location', $post_id);
+                        $phone = get_field('phone', $post_id);
+                        $email = get_field('email', $post_id);
+                        $website_url = get_field('website_url', $post_id);
+                        $website_title = get_field('website_title', $post_id);
+
+                      $html .= '<div class="row the-faculty">';
+                      $html .= '<div class="faculty-img col-md-4">';
+                        if ( has_post_thumbnail() ) {
+                        $html .=  get_the_post_thumbnail(get_the_ID(),'large', array('class' => 'faculty-bio-image responsive', 'alt' => 'Faculty portrait.'));
+                        }  
+                       $html .= '</div><div class="col-md-8"><h2 class="faculty-title">';
+                       $html .=  get_the_title();
+                       $html .= '</h2><div class="row"><div class="col-md-6 faculty-bio-content"><div class="faculty-titles">';
+                        $html .= the_content();
+                       $html .= '</div></div></div></div>';          
+                     endwhile;
+                  endif;
+            wp_reset_query();  // Restore global post data stomped by the_post().
+   return $html;
+}
+
+add_shortcode( 'get-faculty', 'altlab_faculty_shortcode' );
+
+add_shortcode( 'all-faculty', 'lab_all_faculty' );
 
 
 
