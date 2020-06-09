@@ -34,18 +34,19 @@ function alt_lab_lab_load_scripts() {
 */
 function alt_lab_lab_faculty_content($content) {
 global $post;
-    if ($post->post_type == 'faculty') {
-      $content =  alt_lab_lab_faculty_data() . $content;
+    if ($post->post_type === 'faculty' && in_the_loop() && is_main_query()) {
+      $content =  alt_lab_lab_faculty_data($post) . $content;
     }
       return $content;
-    }
+}
+
+
 add_filter('the_content', 'alt_lab_lab_faculty_content');
 
 
 
 //for single faculty pages
-function alt_lab_lab_faculty_data(){
-  global $post;
+function alt_lab_lab_faculty_data($post){
   $post_id = $post->ID;
   $html = '<div class="lab-faculty-data" id="lab-faculty-holder">';
   $title = get_field('title', $post_id);
@@ -86,53 +87,53 @@ function lab_all_faculty( $atts, $content = null ) {
 
     $html ='';
     $type = htmlspecialchars_decode($type);
-               $args = array(
-                      'posts_per_page' => -1,
-                      'post_type'   => 'faculty', 
-                      'post_status' => 'publish', 
-                      'orderby' => 'name', 
-                      'order' => 'ASC',                
-                      'meta_query' => array(
-                      'relation'    => 'OR',
-                      // array(
-                      //   'key'   => 'group',
-                      //   'value'   => $type,
-                      //   'compare' => 'LIKE'
-                      // ),
-                  )
-                      //do the published option and consider sorting
-                    );
-                    // query
-                    $the_query = new WP_Query( $args );
-                    if( $the_query->have_posts() ): 
-                      while ( $the_query->have_posts() ) : $the_query->the_post(); 
-                        global $post;
-                        $post_id = $post->ID;
-                        $title = get_field('title', $post_id);
-                        $expertise = get_field('area_of_expertise', $post_id);
-                        $location = get_field('location', $post_id);
-                        $phone = get_field('phone', $post_id);
-                        $email = get_field('email', $post_id);
-                        $website_url = get_field('website_url', $post_id);
-                        $website_title = get_field('website_title', $post_id);
+    $args = array(
+          'posts_per_page' => -1,
+          'post_type'   => 'faculty', 
+          'post_status' => 'publish', 
+          'orderby' => 'name', 
+          'order' => 'ASC',                
+          'meta_query' => array(
+          'relation'    => 'OR',
+          // array(
+          //   'key'   => 'group',
+          //   'value'   => $type,
+          //   'compare' => 'LIKE'
+          // ),
+      )
+      //do the published option and consider sorting
+    );
+          // query
+      $the_query = new WP_Query( $args );
+          if( $the_query->have_posts() ): 
+            while ( $the_query->have_posts() ) : $the_query->the_post(); 
+            
+              $post_id = get_the_ID();
+              $title = get_field('title', $post_id);
+              $expertise = get_field('area_of_expertise', $post_id);
+              $location = get_field('location', $post_id);
+              $phone = get_field('phone', $post_id);
+              $email = get_field('email', $post_id);
+              $website_url = get_field('website_url', $post_id);
+              $website_title = get_field('website_title', $post_id);
 
-                      $html .= '<div class="row the-faculty">';
-                      $html .= '<div class="faculty-img col-md-4">';
-                        if ( has_post_thumbnail() ) {
-                        $html .=  get_the_post_thumbnail(get_the_ID(),'large', array('class' => 'faculty-bio-image responsive', 'alt' => 'Faculty portrait.'));
-                        }  
-                       $html .= '</div><div class="col-md-8"><h2 class="faculty-title">';
-                       $html .=  get_the_title();
-                       $html .= '</h2><div class="row"><div class="col-md-6 faculty-bio-content"><div class="faculty-titles">';
-                        $html .= the_content();
-                       $html .= '</div></div></div></div>';          
-                     endwhile;
-                  endif;
-            wp_reset_query();  // Restore global post data stomped by the_post().
+            $html .= '<div class="row the-faculty">';
+              if ( has_post_thumbnail() ) {
+              $html .=  get_the_post_thumbnail(get_the_ID(),'medium', array('class' => 'faculty-bio-image responsive', 'alt' => 'The faculty biography picture for ' . get_the_title() .'.'));
+              }  
+             $html .= '<h2 class="faculty-title">';
+             $html .=  get_the_title();
+             $html .= '</h2>';
+              if ($title){
+                $html .= '<div class="lab-title"><span class="lab-label lab-title-label">Title:</span><span class="lab-content lab-title-content">' . $title . '</span></div>';
+              } 
+             $html .= get_the_content();
+             $html .= '</div>';          
+           endwhile;
+        endif;
+  wp_reset_query();  // Restore global post data stomped by the_post().
    return $html;
 }
-
-add_shortcode( 'get-faculty', 'altlab_faculty_shortcode' );
 
 add_shortcode( 'all-faculty', 'lab_all_faculty' );
 
