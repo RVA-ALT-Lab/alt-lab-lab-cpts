@@ -106,6 +106,7 @@ function lab_all_faculty( $atts, $content = null ) {
           // query
       $the_query = new WP_Query( $args );
           if( $the_query->have_posts() ): 
+            $html .= '<div class="faculty-holder">';
             while ( $the_query->have_posts() ) : $the_query->the_post(); 
             
               $post_id = get_the_ID();
@@ -117,7 +118,7 @@ function lab_all_faculty( $atts, $content = null ) {
               $website_url = get_field('website_url', $post_id);
               $website_title = get_field('website_title', $post_id);
 
-            $html .= '<div class="row the-faculty">';
+            $html .= '<div class="the-faculty">';
               if ( has_post_thumbnail() ) {
               $html .=  get_the_post_thumbnail(get_the_ID(),'medium', array('class' => 'faculty-bio-image responsive', 'alt' => 'The faculty biography picture for ' . get_the_title() .'.'));
               }  
@@ -125,11 +126,12 @@ function lab_all_faculty( $atts, $content = null ) {
              $html .=  get_the_title();
              $html .= '</h2>';
               if ($title){
-                $html .= '<div class="lab-title"><span class="lab-label lab-title-label">Title:</span><span class="lab-content lab-title-content">' . $title . '</span></div>';
+                $html .= '<div class="lab-title"><span class="lab-label lab-title-label">Title:</span> <span class="lab-content lab-title-content">' . $title . '</span></div>';
               } 
              $html .= get_the_content();
              $html .= '</div>';          
            endwhile;
+           $html .= '</div>';
         endif;
   wp_reset_query();  // Restore global post data stomped by the_post().
    return $html;
