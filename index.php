@@ -120,10 +120,10 @@ function lab_all_faculty( $atts, $content = null ) {
 
             $html .= '<div class="the-faculty">';
               if ( has_post_thumbnail() ) {
-              $html .=  get_the_post_thumbnail(get_the_ID(),'medium', array('class' => 'faculty-bio-image responsive', 'alt' => 'The faculty biography picture for ' . get_the_title() .'.'));
+              $html .=  get_the_post_thumbnail(get_the_ID(),'faculty-img', array('class' => 'faculty-bio-image responsive', 'alt' => 'The faculty biography picture for ' . get_the_title() .'.'));
               }  
              $html .= '<h2 class="faculty-title">';
-             $html .=  get_the_title();
+             $html .=  '<a href="' . get_permalink() . '">' .get_the_title() . '</a>';
              $html .= '</h2>';
               if ($title){
                 $html .= '<div class="lab-title"><span class="lab-content lab-title-content">' . $title . '</span></div>';
@@ -139,6 +139,9 @@ function lab_all_faculty( $atts, $content = null ) {
 
 add_shortcode( 'all-faculty', 'lab_all_faculty' );
 
+
+//add new media size
+add_image_size( 'faculty-img', 220, 220, array( 'center', 'center' ) ); // Hard crop center center
 
 
 /*
