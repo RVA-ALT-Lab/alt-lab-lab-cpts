@@ -126,7 +126,7 @@ function lab_all_faculty( $atts, $content = null ) {
              $html .=  get_the_title();
              $html .= '</h2>';
               if ($title){
-                $html .= '<div class="lab-title"><span class="lab-label lab-title-label">Title:</span> <span class="lab-content lab-title-content">' . $title . '</span></div>';
+                $html .= '<div class="lab-title"><span class="lab-content lab-title-content">' . $title . '</span></div>';
               } 
              $html .= get_the_content();
              $html .= '</div>';          

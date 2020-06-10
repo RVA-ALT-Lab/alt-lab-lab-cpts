@@ -17,7 +17,8 @@
 
 .faculty-holder h2 {
 	font-size: 1.2em;
-	margin: 10px 0;
+	margin: 10px 0 0 0;
+	padding: 0;
 }
 
 .faculty-bio-image {
@@ -30,4 +31,9 @@
 	padding: 15px;
 	margin: 5px;
 	width: 220px;
+	border: 1px solid #efefef;
+}
+
+.lab-title {
+	font-size: .8em;
 }
