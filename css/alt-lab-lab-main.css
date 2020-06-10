@@ -12,6 +12,7 @@
 
 .faculty-holder {
 	display: flex;	
+	flex-wrap: wrap;
 }
 
 .faculty-holder h2 {
@@ -23,4 +24,10 @@
 	width: 200px;
   	height: 200px;
   	object-fit: cover;
+}
+
+.the-faculty {
+	padding: 15px;
+	margin: 5px;
+	width: 220px;
 }
