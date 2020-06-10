@@ -45,3 +45,15 @@
 .lab-title {
 	font-size: .8em;
 }
+
+
+@media only screen and (max-width: 600px) {
+	.the-faculty {
+		margin: 10px auto;
+		width: 90%;
+	}
+	.the-faculty .faculty-bio-image {
+		padding: 0;
+		margin: 10px auto 15px auto;
+	}
+}
