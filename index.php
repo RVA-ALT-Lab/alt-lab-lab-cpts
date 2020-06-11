@@ -126,9 +126,11 @@ function lab_all_faculty( $atts, $content = null ) {
              $html .=  '<a href="' . get_permalink() . '">' .get_the_title() . '</a>';
              $html .= '</h2>';
               if ($title){
-                $html .= '<div class="lab-title"><span class="lab-content lab-title-content">' . $title . '</span></div>';
+                $html .= '<div class="lab-title">' . $title . '</div>';
               } 
-             $html .= get_the_content();
+              //  if ($email){
+              //   $html .= '<div class="lab-email">' . $email . '</div>';
+              // } 
              $html .= '</div>';          
            endwhile;
            $html .= '</div>';
