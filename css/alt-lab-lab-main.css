@@ -10,6 +10,11 @@
 	margin-right: 20px;
 }
 
+.lab-row .lab-title-content {
+	font-size: 1.1em;
+	margin: 10px 0;
+}
+
 .faculty-holder {
 	display: flex;	
 	flex-wrap: wrap;

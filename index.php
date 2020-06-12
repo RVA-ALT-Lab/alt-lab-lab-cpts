@@ -56,9 +56,8 @@ function alt_lab_lab_faculty_data($post){
   $email = get_field('email', $post_id);
   $website_url = get_field('website_url', $post_id);
   $website_title = get_field('website_title', $post_id);
-  $html .= '<div class="lab-row">';
   if ($title){
-    $html .= '<div class="lab-label lab-title-label">Title:</div><div class="lab-content lab-title-content">' . $title . '</div></div>';
+    $html .= '<div class="lab-row"><div class="lab-content lab-title-content">' . $title . '</div></div>';
   } 
   if ($expertise){
     $html .= '<div class="lab-row"><div class="lab-label lab-expertise-label">Expertise:</div><div class="lab-content lab-expertise-content">' . $expertise . '</div></div>';
@@ -75,7 +74,7 @@ function alt_lab_lab_faculty_data($post){
   if ($website_url){
     $html .= '<div class="lab-row"><div class="lab-label lab-website-label">Website:</div><div class="lab-content lab-website-content"><a href="' . $website_url . '">' . $website_title . '</a></div>';
   }
-  return $html . '</div></div>';
+  return $html . '</div>';
 }
 
 
@@ -95,11 +94,11 @@ function lab_all_faculty( $atts, $content = null ) {
           'order' => 'ASC',                
           'meta_query' => array(
           'relation'    => 'OR',
-          // array(
-          //   'key'   => 'group',
-          //   'value'   => $type,
-          //   'compare' => 'LIKE'
-          // ),
+          array(
+            'key'   => 'group',
+            'value'   => $type,
+            'compare' => 'LIKE'
+          ),
       )
       //do the published option and consider sorting
     );
@@ -142,7 +141,7 @@ function lab_all_faculty( $atts, $content = null ) {
 add_shortcode( 'all-faculty', 'lab_all_faculty' );
 
 
-//add new media size
+//add new media size for faculty bio pics
 add_image_size( 'faculty-img', 220, 220, array( 'center', 'center' ) ); // Hard crop center center
 
 
