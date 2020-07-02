@@ -81,7 +81,8 @@ function alt_lab_lab_faculty_data($post){
 //shortcode for faculty content by type
 function lab_all_faculty( $atts, $content = null ) {
     extract(shortcode_atts( array(
-         'type' => '',  
+         'type' => '', 
+         'link' => '',
     ), $atts));     
 
     $html ='';
@@ -105,6 +106,7 @@ function lab_all_faculty( $atts, $content = null ) {
           // query
       $the_query = new WP_Query( $args );
           if( $the_query->have_posts() ): 
+           
             $html .= '<div class="faculty-holder">';
             while ( $the_query->have_posts() ) : $the_query->the_post(); 
             
@@ -116,8 +118,13 @@ function lab_all_faculty( $atts, $content = null ) {
               $email = get_field('email', $post_id);
               $website_url = get_field('website_url', $post_id);
               $website_title = get_field('website_title', $post_id);
+           if ($link === 'true'){
+              $fac_link = '<a href="' . get_permalink($post_id) . '">';
+            } else {
+              $fac_link = '';
+            }
 
-            $html .= '<div class="the-faculty">';
+            $html .= $fac_link .'<div class="the-faculty">';
               if ( has_post_thumbnail() ) {
               $html .=  get_the_post_thumbnail(get_the_ID(),'faculty-img', array('class' => 'faculty-bio-image responsive', 'alt' => 'The faculty biography picture for ' . get_the_title() .'.'));
               }  
@@ -130,9 +137,13 @@ function lab_all_faculty( $atts, $content = null ) {
               //  if ($email){
               //   $html .= '<div class="lab-email">' . $email . '</div>';
               // } 
-             $html .= '</div>';          
+             $html .= '</div>'; 
+              if ($link === 'true'){
+                $html .= '</a>';
+               }         
            endwhile;
            $html .= '</div>';
+          
         endif;
   wp_reset_query();  // Restore global post data stomped by the_post().
    return $html;
